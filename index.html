@@ -306,58 +306,131 @@
             }
         }
 
-        /* Sleek Minimalist Mobile Header */
+        /* PDF Header Bar - Question Header */
         .pdf-header-bar {
-            height: 44px;
-            background: rgba(14, 11, 25, 0.96);
+            height: 48px;
+            background: rgba(14, 11, 25, 0.98);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 18px;
+            justify-content: center;
+            padding: 0 16px;
             flex-shrink: 0;
             z-index: 10;
         }
 
         .pdf-header-title {
-            font-size: 0.82rem;
+            font-size: 0.96rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--gold);
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 8px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
         }
 
         .pdf-header-title svg {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             fill: var(--gold);
+            filter: drop-shadow(0 0 6px rgba(212, 168, 83, 0.4));
         }
 
-        .pdf-page-badge {
+        /* Document 1 Lock Overlay */
+        .doc-lock-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 8, 20, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
-            background: rgba(255, 255, 255, 0.07);
-            padding: 3px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: center;
+            padding: 16px;
+            z-index: 15;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
-        .pdf-dot-indicator {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #4caf50;
-            box-shadow: 0 0 8px #4caf50;
-            display: inline-block;
+        .doc-lock-card {
+            background: linear-gradient(165deg, rgba(28, 22, 48, 0.96) 0%, rgba(14, 11, 26, 0.98) 100%);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 22px;
+            padding: 28px 22px 24px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(156, 39, 176, 0.25);
+            animation: cardPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .doc-lock-icon {
+            width: 40px;
+            height: 40px;
+            fill: var(--gold);
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 8px rgba(212, 168, 83, 0.4));
+        }
+
+        .doc-lock-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .doc-lock-question {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .doc-lock-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .doc-lock-input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            outline: none;
+            background: rgba(255,255,255,0.08);
+            transition: all 0.2s;
+        }
+
+        .doc-lock-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.25);
+            background: rgba(255,255,255,0.14);
+        }
+
+        .doc-lock-msg {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            font-weight: 600;
+            min-height: 18px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .doc-lock-msg.success {
+            color: #66bb6a;
+        }
+
+        .doc-lock-msg.error {
+            color: #ef5350;
         }
 
         /* PDF Iframe Viewport - Fills vertical space cleanly, NO page scroll */
@@ -953,39 +1026,126 @@
             transform: scale(1.3);
         }
 
-        /* Screen 5: Shelter */
+        /* Screen 5: Shelter (Enchanted Nature Retreat) */
         #screen-shelter {
-            background: linear-gradient(160deg, #e8f5e9 0%, #c8e6c9 100%);
+            background: radial-gradient(ellipse at 50% 30%, rgba(76, 175, 80, 0.28) 0%, transparent 65%),
+                        linear-gradient(170deg, #050e07 0%, #0c1c10 50%, #040905 100%);
+            position: relative;
+            overflow: hidden;
         }
 
         .shelter-card {
-            background: white;
-            border-radius: 24px;
+            background: rgba(14, 28, 18, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 28px;
+            border: 1.5px solid rgba(76, 175, 80, 0.35);
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.7), 0 0 40px rgba(76, 175, 80, 0.2);
             width: 90%;
-            max-width: 500px;
+            max-width: 480px;
             text-align: center;
+            animation: shelterCardIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes shelterCardIn {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .shelter-bar {
-            height: 8px;
-            background: #4caf50;
+            height: 6px;
+            background: linear-gradient(90deg, #4caf50, #81c784, #4caf50);
             width: 100%;
         }
 
         .shelter-content {
-            padding: 40px;
+            padding: 36px 28px 32px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        .shelter-icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .shelter-halo {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.4) 0%, transparent 70%);
+            animation: haloPulse 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes haloPulse {
+            from { transform: scale(0.9); opacity: 0.5; }
+            to { transform: scale(1.35); opacity: 0.95; }
+        }
+
         .shelter-icon {
-            width: 60px;
-            height: 60px;
-            fill: #4caf50;
-            margin-bottom: 20px;
+            width: 52px;
+            height: 52px;
+            fill: #81c784;
+            filter: drop-shadow(0 0 12px rgba(129, 199, 132, 0.7));
+            position: relative;
+            z-index: 2;
+        }
+
+        .shelter-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #81c784;
+            background: rgba(76, 175, 80, 0.12);
+            border: 1px solid rgba(76, 175, 80, 0.25);
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .shelter-story-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            line-height: 1.6;
+            color: #e8f5e9;
+            margin-bottom: 28px;
+        }
+
+        .btn-shelter-ok {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 13px 38px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.5);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-shelter-ok:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(46, 125, 50, 0.7);
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+
+        .btn-shelter-ok:active {
+            transform: translateY(0);
         }
 
         /* Screen 6: Timer */
@@ -1376,26 +1536,22 @@
         <div class="speech-bubble">
             <div id="intro-text" class="typewriter-text"></div>
         </div>
-        <button id="intro-btn" class="btn-primary" onclick="transitionTo('screen-pdf')">
+        <button id="intro-btn" class="btn-primary" onclick="handleIntroOk()">
             OK, I'll Help!
             <svg><use href="#icon-paw"></use></svg>
         </button>
     </div>
 
-    <!-- Screen 2: PDF + PIN -->
+    <!-- Screen 2: PDF Viewer -->
     <div id="screen-pdf" class="screen">
         <div class="starfield" id="starfield"></div>
         
         <div class="pdf-container" id="pdf-container">
-            <!-- Sleek Minimal Header -->
+            <!-- Question Header -->
             <div class="pdf-header-bar">
                 <div class="pdf-header-title">
-                    <svg><use href="#icon-book"></use></svg>
-                    <span>The Chronicles</span>
-                </div>
-                <div class="pdf-page-badge">
-                    <span class="pdf-dot-indicator"></span>
-                    <span>Document <span id="pdf-num-badge">1</span> of 3</span>
+                    <svg><use href="#icon-lock"></use></svg>
+                    <span>Do you know when I was born?</span>
                 </div>
             </div>
 
@@ -1404,20 +1560,34 @@
                 <iframe class="pdf-iframe active" id="pdf-iframe-1" src="https://drive.google.com/file/d/1tS37ClcTisKgMUvStDtZS9FveKv-LZKN/preview" allow="autoplay" loading="lazy"></iframe>
                 <iframe class="pdf-iframe" id="pdf-iframe-2" src="https://drive.google.com/file/d/1VN3SVO2oSzHAn1UzzyttaWHpRmL9PnvQ/preview" allow="autoplay" loading="lazy"></iframe>
                 <iframe class="pdf-iframe" id="pdf-iframe-3" src="https://drive.google.com/file/d/1Ep45U87k2o3JpV83vPWvgvyAiejWrubL/preview" allow="autoplay" loading="lazy"></iframe>
+
+                <!-- Lock overlay for Document 1 -->
+                <div class="doc-lock-overlay" id="doc1-lock-overlay">
+                    <div class="doc-lock-card">
+                        <svg class="doc-lock-icon"><use href="#icon-lock"></use></svg>
+                        <h3 class="doc-lock-title">Document Locked</h3>
+                        <p class="doc-lock-question">Do you know when I was born?</p>
+                        <div class="doc-lock-input-row">
+                            <input type="text" maxlength="8" class="doc-lock-input" id="doc1-pin-input" placeholder="Enter PIN..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') verifyDoc1Pin()">
+                            <button class="passkey-submit-btn" onclick="verifyDoc1Pin()">Unlock</button>
+                        </div>
+                        <div class="doc-lock-msg" id="doc1-lock-msg"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Branch Password Prompt (hidden until next on last PDF) -->
             <div class="branch-prompt" id="branch-prompt">
                 <div class="branch-card">
-                    <svg class="branch-lock-icon"><use href="#icon-lock"></use></svg>
-                    <h3 class="branch-title">Identify the Branch</h3>
-                    <p class="branch-question">Answer should be which branch, you can tell which branch by identifying it i.e left/right</p>
+                    <svg class="branch-lock-icon"><use href="#icon-tree"></use></svg>
+                    <h3 class="branch-title">Identify the branch</h3>
+                    <p class="branch-question">i.e. left or right</p>
                     <div class="branch-input-row">
-                        <input type="text" class="branch-input" id="branch-input" placeholder="Type left or right..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') verifyBranch()">
+                        <input type="text" class="branch-input" id="branch-input" placeholder="Type your answer..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') verifyBranch()">
                         <button class="passkey-submit-btn" onclick="verifyBranch()">Submit</button>
                     </div>
                     <div class="branch-msg" id="branch-msg"></div>
-                    <button class="btn-ghost" style="margin-top: 14px; font-size: 0.85rem; padding: 6px 18px;" onclick="closeBranchPrompt()">← Back to PDFs</button>
+                    <button class="btn-ghost" style="margin-top: 14px; font-size: 0.85rem; padding: 6px 18px;" onclick="closeBranchPrompt()">← Back to Documents</button>
                 </div>
             </div>
 
@@ -1456,24 +1626,10 @@
         </div>
     </div>
 
-    <!-- Screen 4: Story Slides -->
+    <!-- Screen 4: Story Slide (First Slide Only) -->
     <div id="screen-story" class="screen">
         <div class="story-container" id="story-container">
-            <div class="nav-buttons">
-                <button class="nav-btn" id="slide-prev" onclick="changeSlide(-1)">
-                    <svg><use href="#icon-arrow-left"></use></svg>
-                </button>
-                <button class="nav-btn" id="slide-next" onclick="changeSlide(1)">
-                    <svg><use href="#icon-arrow-right"></use></svg>
-                </button>
-            </div>
-            
-            <div class="slide-dots" id="slide-dots">
-                <div class="dot active" onclick="goToSlide(0)"></div>
-                <div class="dot" onclick="goToSlide(1)"></div>
-                <div class="dot" onclick="goToSlide(2)"></div>
-                <div class="dot" onclick="goToSlide(3)"></div>
-            </div>
+            <!-- First slide built dynamically -->
         </div>
     </div>
 
@@ -1482,12 +1638,17 @@
         <div class="shelter-card">
             <div class="shelter-bar"></div>
             <div class="shelter-content">
-                <svg class="shelter-icon"><use href="#icon-tree"></use></svg>
-                <div class="story-text" style="font-size:1.4rem; margin-bottom:40px;">
-                    Torn the vines — it makes my tree look bad... I want a shelter... maybe it has something for you there...
+                <div class="shelter-icon-wrapper">
+                    <div class="shelter-halo"></div>
+                    <svg class="shelter-icon"><use href="#icon-tree"></use></svg>
                 </div>
-                <button class="btn-primary" style="background: #4caf50; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);" onclick="transitionTo('screen-timer'); startTimer();">
-                    OK
+                <div class="shelter-badge">✦ A Quiet Haven ✦</div>
+                <div class="shelter-story-text">
+                    &ldquo;Torn the vines — it makes my tree look bad... I want a shelter... maybe it has something for you there...&rdquo;
+                </div>
+                <button class="btn-shelter-ok" onclick="transitionTo('screen-timer'); startTimer();">
+                    <span>OK, Let's Go</span>
+                    <svg style="width:18px;height:18px;fill:currentColor;"><use href="#icon-arrow-right"></use></svg>
                 </button>
             </div>
         </div>
@@ -1500,7 +1661,7 @@
             <div class="timer-ring"></div>
         </div>
         <div class="timer-msg">Take your time... I'll wait right here</div>
-        <div class="time-display" id="time-display">3:00</div>
+        <div class="time-display" id="time-display">0:30</div>
         <div class="progress-container">
             <div class="progress-bar" id="timer-progress"></div>
         </div>
@@ -1774,11 +1935,111 @@
             type();
         }
 
-        // ═══ PDF IFRAME NAVIGATION ═══
+        // ═══ INTRO & CURTAIN FLOW ═══
+        function handleIntroOk() {
+            startBGM(0.12);
+            transitionTo('screen-curtain');
+            setTimeout(openCurtain, 600);
+        }
+
+        // Curtain
+        function openCurtain() {
+            startBGM(0.12);
+            document.getElementById('curtain-behind').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('curtain-l').style.transform = 'translateX(-105%)';
+                document.getElementById('curtain-r').style.transform = 'translateX(105%)';
+                
+                setTimeout(() => {
+                    transitionTo('screen-story');
+                    buildFirstSlideOnly();
+                }, 2200);
+            }, 1500);
+        }
+
+        // Story: First Slide Only
+        function buildFirstSlideOnly() {
+            const container = document.getElementById('story-container');
+            container.innerHTML = '';
+            
+            const data = storyData[0];
+            const slide = document.createElement('div');
+            slide.className = 'slide active';
+            slide.id = 'slide-0';
+            slide.style.cssText = 'position: relative; width: 90%; max-width: 520px; opacity: 1; visibility: visible; transform: none;';
+            
+            slide.innerHTML = `
+                <div class="story-card">
+                    <div class="story-bar"></div>
+                    <div class="story-content">
+                        <div class="slide-header">
+                            <div class="divider"></div>
+                            <span>${data.chapter}</span>
+                            <div class="divider"></div>
+                        </div>
+                        <div class="story-text" style="font-size: 1.35rem; line-height: 1.8; margin-bottom: 25px;">${data.text.replace(/\n/g, '<br>')}</div>
+                        <button class="btn-primary" style="box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);" onclick="transitionTo('screen-pdf')">
+                            Continue to the Documents
+                            <svg><use href="#icon-arrow-right"></use></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(slide);
+        }
+
+        // ═══ PDF IFRAME NAVIGATION & LOCK SYSTEM ═══
         let pdfCurrentPage = 1;
+        let doc1Unlocked = false;
+
+        function verifyDoc1Pin() {
+            const input = document.getElementById('doc1-pin-input');
+            const msg = document.getElementById('doc1-lock-msg');
+            const val = input.value.trim();
+            
+            if (val === '9411') {
+                doc1Unlocked = true;
+                msg.className = 'doc-lock-msg success';
+                msg.textContent = '✓ Correct! Document unlocked.';
+                input.disabled = true;
+                
+                const nextBtn = document.getElementById('pdf-arr-next');
+                if (nextBtn) nextBtn.disabled = false;
+                
+                setTimeout(() => {
+                    const overlay = document.getElementById('doc1-lock-overlay');
+                    if (overlay) {
+                        overlay.style.opacity = '0';
+                        overlay.style.pointerEvents = 'none';
+                        setTimeout(() => { overlay.style.display = 'none'; }, 500);
+                    }
+                }, 600);
+            } else {
+                msg.className = 'doc-lock-msg error';
+                msg.textContent = 'Incorrect PIN. Think about when we were born...';
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 450);
+            }
+        }
 
         function navPdfPage(dir) {
             let target = pdfCurrentPage + dir;
+            
+            // If on Doc 1 and attempting to go to Doc 2 without unlocking
+            if (pdfCurrentPage === 1 && dir === 1 && !doc1Unlocked) {
+                const msg = document.getElementById('doc1-lock-msg');
+                if (msg) {
+                    msg.className = 'doc-lock-msg error';
+                    msg.textContent = 'Please enter the password to view this document first!';
+                }
+                const input = document.getElementById('doc1-pin-input');
+                if (input) {
+                    input.classList.add('shake');
+                    setTimeout(() => input.classList.remove('shake'), 450);
+                    input.focus();
+                }
+                return;
+            }
             
             // If on last PDF and pressing next → show branch prompt
             if (pdfCurrentPage === 3 && dir === 1) {
@@ -1802,11 +2063,15 @@
             });
             const prevBtn = document.getElementById('pdf-arr-prev');
             if (prevBtn) prevBtn.disabled = (num === 1);
+            
             const nextBtn = document.getElementById('pdf-arr-next');
-            if (nextBtn) nextBtn.disabled = false;
-
-            const badge = document.getElementById('pdf-num-badge');
-            if (badge) badge.textContent = num;
+            if (nextBtn) {
+                if (num === 1 && !doc1Unlocked) {
+                    nextBtn.disabled = true;
+                } else {
+                    nextBtn.disabled = false;
+                }
+            }
 
             for (let i = 1; i <= 3; i++) {
                 const dot = document.getElementById(`pdot-${i}`);
@@ -1819,17 +2084,24 @@
             const msg = document.getElementById('branch-msg');
             const val = input.value.trim().toLowerCase();
             
-            if (val === 'left' || val === 'right' || val.includes('left') || val.includes('right')) {
+            // User requested: "answer is upper/up/upper branch these"
+            const isUpper = val === 'upper' || val === 'up' || val === 'upper branch' || val === 'up branch' || val === 'the upper branch' || val === 'top' || val === 'top branch' || val.includes('upper') || (val.includes('up') && !val.includes('group'));
+            
+            if (isUpper) {
                 msg.className = 'branch-msg success';
-                msg.textContent = 'Correct! Opening the story...';
+                msg.textContent = '✓ Correct! Taking you to the shelter...';
                 input.disabled = true;
                 setTimeout(() => {
-                    transitionTo('screen-curtain');
-                    setTimeout(openCurtain, 800);
+                    transitionTo('screen-shelter');
                 }, 800);
+            } else if (val === 'left' || val === 'right') {
+                msg.className = 'branch-msg error';
+                msg.textContent = 'Look closer! It’s neither left nor right... think higher!';
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 450);
             } else {
                 msg.className = 'branch-msg error';
-                msg.textContent = 'That does not seem right. Look at the images carefully — which branch?';
+                msg.textContent = 'That is not correct. Look closely at the tree!';
                 input.classList.add('shake');
                 setTimeout(() => input.classList.remove('shake'), 450);
             }
@@ -1838,17 +2110,6 @@
         function closeBranchPrompt() {
             document.getElementById('branch-prompt').classList.remove('visible');
             document.getElementById('pdf-bottom-nav').style.display = 'flex';
-        }
-
-        function handlePinHelp() {
-            helpClicks++;
-            let msg = "";
-            if(helpClicks === 1) msg = "Do you really know?";
-            else if(helpClicks <= 3) msg = "Do you really know? Think harder!";
-            else msg = "Think you are chatting in a WP chat... what will be your answer? Try something about it!";
-            
-            document.getElementById('help-modal-text').textContent = msg;
-            document.getElementById('help-modal').classList.add('show');
         }
 
         function showHelpModal(msg) {
@@ -1860,114 +2121,10 @@
             document.getElementById('help-modal').classList.remove('show');
         }
 
-        // Curtain
-        function openCurtain() {
-            startBGM(0.12);
-            document.getElementById('curtain-behind').classList.add('show');
-            setTimeout(() => {
-                document.getElementById('curtain-l').style.transform = 'translateX(-105%)';
-                document.getElementById('curtain-r').style.transform = 'translateX(105%)';
-                
-                setTimeout(() => {
-                    transitionTo('screen-story');
-                    buildSlides();
-                }, 2200);
-            }, 1500);
-        }
-
-        // Story Slides
-        function buildSlides() {
-            const container = document.getElementById('story-container');
-            document.querySelectorAll('.slide').forEach(s => s.remove());
-            
-            storyData.forEach((data, index) => {
-                const slide = document.createElement('div');
-                slide.className = `slide ${index === 0 ? 'active' : ''}`;
-                slide.id = `slide-${index}`;
-                
-                let checkHTML = '';
-                let warningHTML = '';
-                
-                if(data.checkLabel) {
-                    checkHTML = `
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="check-${index}" onchange="handleSlideCheck(${index})" ${slideChecks[index] ? 'checked' : ''}>
-                        <div class="custom-checkbox"><svg><use href="#icon-check"></use></svg></div>
-                        <span class="checkbox-label">${data.checkLabel}</span>
-                    </label>`;
-                }
-                if(data.warning) {
-                    warningHTML = `<div class="warning-text">${data.warning}</div>`;
-                }
-
-                slide.innerHTML = `
-                    <div class="story-card">
-                        <div class="story-bar"></div>
-                        <div class="story-content">
-                            <div class="slide-header">
-                                <div class="divider"></div>
-                                <span>${data.chapter}</span>
-                                <div class="divider"></div>
-                            </div>
-                            <div class="story-text">${data.text.replace(/\n/g, '<br>')}</div>
-                            ${warningHTML}
-                            ${checkHTML}
-                            <button class="btn-hint" onclick="showHelpModal('${data.hint.replace(/'/g, "\\'")}')">Need Help?</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(slide);
-            });
-            updateSlideArrows();
-        }
-
-        function changeSlide(dir) {
-            goToSlide(currentSlide + dir);
-        }
-
-        function goToSlide(index) {
-            if(index < 0 || index >= storyData.length || index === currentSlide) return;
-            
-            const current = document.getElementById(`slide-${currentSlide}`);
-            const target = document.getElementById(`slide-${index}`);
-            
-            if(current) {
-                current.classList.remove('active');
-                current.style.transform = index > currentSlide ? 'translateX(-50px)' : 'translateX(50px)';
-            }
-            
-            if(target) {
-                target.classList.add('active');
-                target.style.transform = 'translateX(0)';
-            }
-            
-            currentSlide = index;
-            updateSlideArrows();
-            
-            document.querySelectorAll('.slide-dots .dot').forEach((d, i) => {
-                d.className = `dot ${i === index ? 'active' : ''}`;
-            });
-        }
-
-        function updateSlideArrows() {
-            document.getElementById('slide-prev').disabled = currentSlide === 0;
-            document.getElementById('slide-next').disabled = currentSlide === storyData.length - 1;
-        }
-
-        function handleSlideCheck(index) {
-            const cb = document.getElementById(`check-${index}`);
-            slideChecks[index] = cb.checked;
-            
-            if(index === 3 && cb.checked) {
-                setTimeout(() => {
-                    transitionTo('screen-shelter');
-                }, 500);
-            }
-        }
-
-        // Timer
+        // Timer (30 seconds)
         function startTimer() {
-            let timeLeft = 180; // 3 minutes
+            const totalSeconds = 30;
+            let timeLeft = 30;
             const display = document.getElementById('time-display');
             const progress = document.getElementById('timer-progress');
             
@@ -1977,7 +2134,7 @@
                 const m = Math.floor(timeLeft / 60);
                 const s = timeLeft % 60;
                 display.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-                progress.style.width = `${(timeLeft / 180) * 100}%`;
+                progress.style.width = `${(timeLeft / totalSeconds) * 100}%`;
                 
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
@@ -2059,22 +2216,29 @@ That the greatest gift is setting love free.
             document.getElementById('skip-btn').classList.add('show');
             
             // Reset state
-            currentPin = '';
-            pinAttempts = 0;
-            helpClicks = 0;
-            isLocked = true;
             currentSlide = 0;
-            slideChecks = [false, false, false, false];
             if(timerInterval) clearInterval(timerInterval);
             if(typingTimeout) clearTimeout(typingTimeout);
             
-            // Reset UI
-            updatePinDots();
-            document.getElementById('pin-attempts').textContent = '';
-            document.getElementById('pin-help').classList.remove('visible');
-            document.getElementById('pin-overlay').style.cssText = '';
-            document.getElementById('pdf-container').className = 'pdf-container locked';
-            
+            // Reset Document 1 Lock & Viewport
+            doc1Unlocked = false;
+            const doc1Overlay = document.getElementById('doc1-lock-overlay');
+            if (doc1Overlay) {
+                doc1Overlay.style.display = 'flex';
+                doc1Overlay.style.opacity = '1';
+                doc1Overlay.style.pointerEvents = 'all';
+            }
+            const doc1Input = document.getElementById('doc1-pin-input');
+            if (doc1Input) {
+                doc1Input.value = '';
+                doc1Input.disabled = false;
+            }
+            const doc1Msg = document.getElementById('doc1-lock-msg');
+            if (doc1Msg) {
+                doc1Msg.className = 'doc-lock-msg';
+                doc1Msg.textContent = '';
+            }
+
             // Reset PDF viewer & Branch Prompt
             pdfCurrentPage = 1;
             showPdfIframe(1);
@@ -2118,16 +2282,24 @@ That the greatest gift is setting love free.
             transitionTo('screen-reunion');
         }
 
+        // Global Audio Unlocker on First User Interaction
+        function unlockAudio() {
+            if (bgm && bgm.paused && !isMuted) {
+                bgm.play().then(() => {
+                    audioBtn.classList.add('playing');
+                }).catch(() => {});
+            }
+        }
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, unlockAudio, { once: true });
+        });
+
         // Keyboard support
         window.addEventListener('keydown', (e) => {
             if(document.getElementById('screen-pdf').classList.contains('visible')) {
                 if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
                 if(e.key === 'ArrowLeft') navPdfPage(-1);
                 if(e.key === 'ArrowRight') navPdfPage(1);
-            }
-            else if(document.getElementById('screen-story').classList.contains('visible')) {
-                if(e.key === 'ArrowLeft') changeSlide(-1);
-                if(e.key === 'ArrowRight') changeSlide(1);
             }
         });
 
