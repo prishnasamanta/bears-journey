@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Bear's Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        :root {
+            --pink: #e91e63;
+            --purple: #9c27b0;
+            --deep-purple: #2d1b69;
+            --dark: #0f0e17;
+            --gold: #d4a853;
+            --cream: #fffef9;
+            --text: #3d3d3d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .screen.visible {
+            visibility: visible;
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* Generic Buttons */
+        button {
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            outline: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid rgba(212, 168, 83, 0.3);
+            padding: 10px 26px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(212, 168, 83, 0.1);
+            border-color: var(--gold);
+        }
+
+        .btn-hint {
+            background: transparent;
+            color: var(--purple);
+            border: 2px solid rgba(156,39,176,0.25);
+            padding: 10px 26px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-hint:hover {
+            background: rgba(156,39,176,0.08);
+            border-color: rgba(156,39,176,0.5);
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Screen 1: Intro */
+        #screen-intro {
+            background: linear-gradient(160deg, #fdf2f8 0%, #fce7f3 30%, #e9d5ff 60%, #dbeafe 100%);
+        }
+
+        .intro-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+
+        .bear-portrait-container {
+            position: relative;
+            z-index: 2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .bear-portrait {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bear-ring {
+            position: absolute;
+            inset: -15px;
+            border: 2px dashed var(--pink);
+            border-radius: 50%;
+            animation: spin 15s linear infinite;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .speech-bubble {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            max-width: 80%;
+            width: 350px;
+            z-index: 2;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 12px 12px 12px;
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+        }
+
+        .typewriter-text {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.4rem;
+            color: var(--text);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        #intro-btn {
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        #intro-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Screen 2: PDF + PIN */
+        /* Screen 2: PDF Viewer (Mobile-optimized, Vertical, No-Scroll) */
+        #screen-pdf {
+            background: radial-gradient(ellipse at 50% 15%, rgba(156, 39, 176, 0.22) 0%, transparent 65%),
+                        radial-gradient(ellipse at 50% 85%, rgba(233, 30, 99, 0.15) 0%, transparent 65%),
+                        linear-gradient(180deg, #0a0814 0%, #120f24 50%, #080612 100%);
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .starfield {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+            opacity: var(--opacity);
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 4px white; }
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            max-width: 500px;
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            background: #0d0b17;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        @media (min-width: 601px) {
+            .pdf-container {
+                height: 94vh;
+                max-height: 880px;
+                border-radius: 26px;
+                border: 1.5px solid rgba(255, 255, 255, 0.14);
+                box-shadow: 0 25px 80px rgba(0,0,0,0.85), 0 0 30px rgba(156, 39, 176, 0.2);
+            }
+        }
+
+        /* Sleek Minimalist Mobile Header */
+        .pdf-header-bar {
+            height: 44px;
+            background: rgba(14, 11, 25, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .pdf-header-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .pdf-header-title svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .pdf-page-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.07);
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pdf-dot-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4caf50;
+            box-shadow: 0 0 8px #4caf50;
+            display: inline-block;
+        }
+
+        /* PDF Iframe Viewport - Fills vertical space cleanly, NO page scroll */
+        .pdf-iframe-viewport {
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        .pdf-iframe.active {
+            display: block;
+        }
+
+        /* Bottom Nav with exactly 2 Arrow Buttons */
+        .pdf-bottom-nav {
+            height: 72px;
+            background: rgba(14, 11, 25, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            padding-bottom: max(6px, env(safe-area-inset-bottom));
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .pdf-nav-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pdf-nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .pdf-nav-dot.active {
+            width: 22px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            box-shadow: 0 0 10px rgba(233, 30, 99, 0.6);
+        }
+
+        .pdf-arrow-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+            border: 1.5px solid rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .pdf-arrow-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+            transition: transform 0.2s ease, fill 0.2s ease;
+        }
+
+        .pdf-arrow-btn:active:not(:disabled) {
+            transform: scale(0.92);
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+        }
+
+        .pdf-arrow-btn:hover:not(:disabled) {
+            border-color: var(--pink);
+            background: rgba(233, 30, 99, 0.25);
+            box-shadow: 0 0 16px rgba(233, 30, 99, 0.5);
+        }
+
+        .pdf-arrow-btn:hover:not(:disabled) svg {
+            fill: var(--pink);
+        }
+
+        .pdf-arrow-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Branch Password Prompt - Full mobile overlay without scroll */
+        .branch-prompt {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 6, 16, 0.94);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 30;
+            animation: branchFadeIn 0.35s ease;
+        }
+
+        .branch-prompt.visible {
+            display: flex;
+        }
+
+        @keyframes branchFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .branch-card {
+            background: linear-gradient(165deg, rgba(28, 22, 48, 0.95) 0%, rgba(14, 11, 26, 0.98) 100%);
+            border: 1.5px solid rgba(255,255,255,0.14);
+            border-radius: 22px;
+            padding: 26px 20px 22px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 30px rgba(156, 39, 176, 0.2);
+            animation: cardPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes cardPopIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .branch-lock-icon {
+            width: 38px;
+            height: 38px;
+            fill: var(--gold);
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 8px rgba(212, 168, 83, 0.4));
+        }
+
+        .branch-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .branch-question {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .branch-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .branch-input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            outline: none;
+            background: rgba(255,255,255,0.07);
+            transition: all 0.2s;
+        }
+
+        .branch-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.25);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .branch-input::placeholder {
+            color: rgba(255,255,255,0.35);
+        }
+
+        .branch-input.shake {
+            animation: passkeyShake 0.45s ease;
+            border-color: #e53935;
+        }
+
+        @keyframes passkeyShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .passkey-submit-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .passkey-submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .branch-msg {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            font-weight: 600;
+            min-height: 18px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .branch-msg.success {
+            color: #66bb6a;
+        }
+
+        .branch-msg.error {
+            color: #ef5350;
+        }
+
+        #pdf-continue {
+            margin-top: 10px;
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);
+            animation: pulseGlowBtn 2s infinite alternate;
+        }
+
+        @keyframes pulseGlowBtn {
+            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4); }
+            100% { transform: scale(1.03); box-shadow: 0 8px 28px rgba(156, 39, 176, 0.6); }
+        }
+
+        /* Help Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: rgba(30, 25, 45, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .modal-overlay.show .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-text {
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        /* Screen 3: Curtain */
+        #screen-curtain {
+            background: #0a0a14;
+        }
+
+        .curtain-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .curtain-half {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            background: linear-gradient(90deg, #600 0%, #800 20%, #a00 50%, #800 80%, #600 100%);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+            transition: transform 2.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            display: flex;
+        }
+
+        .curtain-left { left: 0; transform-origin: left; border-right: 2px solid #500; }
+        .curtain-right { right: 0; transform-origin: right; border-left: 2px solid #500; }
+
+        .curtain-texture {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.1) 40px, rgba(0,0,0,0.2) 80px);
+        }
+
+        .valance {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to bottom, #d4af37, #aa8c2c);
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #8a6c1c;
+        }
+
+        .valance::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: repeating-radial-gradient(circle at 20px 0, transparent, transparent 20px, #aa8c2c 21px, #d4af37 25px);
+            background-size: 40px 15px;
+        }
+
+        .valance-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: #4a0000;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+            font-weight: 700;
+        }
+
+        .curtain-behind {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+
+        .curtain-behind.show { opacity: 1; }
+
+        .curtain-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212,168,83,0.3);
+            margin-bottom: 10px;
+        }
+
+        /* Screen 4: Story Slides */
+        #screen-story {
+            background: linear-gradient(160deg, #fdf2f8 0%, #faf5ff 40%, #eef2ff 100%);
+        }
+
+        .story-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(50px);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-50px);
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .story-bar {
+            height: 8px;
+            background: linear-gradient(90deg, var(--pink), var(--purple));
+            width: 100%;
+        }
+
+        .story-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            color: var(--purple);
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            height: 2px;
+            width: 40px;
+            background: var(--purple);
+            opacity: 0.3;
+        }
+
+        .story-text {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.6rem;
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .story-text em {
+            color: var(--purple);
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .custom-checkbox svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s;
+        }
+
+        .checkbox-container input {
+            display: none;
+        }
+
+        .checkbox-container input:checked + .custom-checkbox {
+            background: var(--purple);
+        }
+
+        .checkbox-container input:checked + .custom-checkbox svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .checkbox-label {
+            font-weight: 600;
+            color: var(--deep-purple);
+            font-size: 1.1rem;
+        }
+
+        .warning-text {
+            font-size: 0.85rem;
+            color: var(--pink);
+            margin-top: -15px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.2s;
+            color: var(--purple);
+        }
+
+        .nav-btn:hover {
+            background: var(--purple);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            background: white;
+            color: #ccc;
+        }
+
+        .nav-btn svg { width: 24px; height: 24px; fill: currentColor; }
+
+        .slide-dots {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(156,39,176,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--purple);
+            transform: scale(1.3);
+        }
+
+        /* Screen 5: Shelter */
+        #screen-shelter {
+            background: linear-gradient(160deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .shelter-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .shelter-bar {
+            height: 8px;
+            background: #4caf50;
+            width: 100%;
+        }
+
+        .shelter-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .shelter-icon {
+            width: 60px;
+            height: 60px;
+            fill: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        /* Screen 6: Timer */
+        #screen-timer {
+            background: #121212;
+            color: white;
+        }
+
+        .timer-icon-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+        }
+
+        .timer-icon {
+            width: 100%;
+            height: 100%;
+            fill: var(--gold);
+            position: relative;
+            z-index: 2;
+        }
+
+        .timer-ring {
+            position: absolute;
+            inset: -10px;
+            border: 2px solid transparent;
+            border-top-color: var(--pink);
+            border-right-color: var(--purple);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        .timer-msg {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+        }
+
+        .time-display {
+            font-size: 6rem;
+            font-weight: 300;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--purple));
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        /* Screen 7: Reunion */
+        #screen-reunion {
+            background: linear-gradient(160deg, #ffc0cb 0%, #ff69b4 100%);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .f-heart {
+            position: absolute;
+            fill: rgba(255,255,255,0.6);
+            bottom: -50px;
+            animation: floatHeart linear infinite;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(45deg); opacity: 0; }
+        }
+
+        .reunion-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reunion-img {
+            width: 300px;
+            border-radius: 20px;
+            border: 8px solid white;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .reunion-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        /* Screen 8: Letter */
+        #screen-letter {
+            background: linear-gradient(160deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        .letter-paper {
+            background: var(--cream);
+            width: 90%;
+            max-width: 600px;
+            height: 80vh;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            position: relative;
+            padding: 50px 40px;
+            overflow-y: auto;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e0e0e0 31px, #e0e0e0 32px);
+            background-attachment: local;
+        }
+
+        .letter-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50px;
+            width: 2px;
+            background: rgba(233, 30, 99, 0.4);
+            z-index: 1;
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 2;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.4rem;
+            line-height: 32px;
+            color: var(--text);
+            white-space: pre-wrap;
+            padding-left: 30px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: var(--text);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        #letter-next {
+            position: absolute;
+            bottom: 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s;
+            z-index: 10;
+        }
+        #letter-next.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Screen 9: Thank You */
+        #screen-thanks {
+            background: linear-gradient(160deg, #2d1b69 0%, #1e1145 100%);
+        }
+
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleAnim var(--dur) ease-in-out infinite alternate;
+        }
+
+        @keyframes sparkleAnim {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px white; }
+        }
+
+        .thanks-title {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            font-size: 0px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+            transition: font-size 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 20px;
+        }
+
+        .thanks-title.show {
+            font-size: 76px;
+        }
+
+        .thanks-sub {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            opacity: 0;
+            transition: opacity 1.2s ease;
+            margin-bottom: 50px;
+        }
+        .thanks-sub.show { opacity: 1; }
+
+        #go-home-btn {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s;
+        }
+        #go-home-btn.show { opacity: 1; pointer-events: all; }
+
+        /* Screen 10: Home */
+        #screen-home {
+            background: linear-gradient(160deg, #fdf2f8 0%, #fce7f3 30%, #e9d5ff 60%, #dbeafe 100%);
+        }
+
+        .home-img {
+            width: 260px;
+            border-radius: 20px;
+            border: 6px solid white;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .home-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--purple);
+            margin-bottom: 40px;
+        }
+
+        /* Skip Button */
+        #skip-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        #skip-btn.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        #skip-btn:hover { background: rgba(255,255,255,0.4); }
+        #skip-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+        /* Audio Indicator */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        .eq-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 15px;
+        }
+        .eq-bar {
+            width: 3px;
+            background: white;
+            border-radius: 2px;
+            height: 20%;
+            transition: height 0.1s;
+        }
+        .audio-control.playing .eq-bar {
+            animation: eqPlay 0.5s infinite alternate;
+        }
+        .audio-control.playing .eq-bar:nth-child(2) { animation-delay: 0.1s; }
+        .audio-control.playing .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+        .audio-control.playing .eq-bar:nth-child(4) { animation-delay: 0.3s; }
+        .audio-control.playing .eq-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes eqPlay {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .bear-portrait, .intro-glow { width: 150px; height: 150px; }
+            .speech-bubble { font-size: 1.2rem; padding: 15px; width: 300px; }
+            .pdf-container { height: 75vh; }
+            .pin-card { padding: 25px; }
+            .pin-dot { width: 45px; height: 45px; font-size: 20px; }
+            .key { height: 50px; font-size: 1.3rem; }
+            .story-content { padding: 25px; }
+            .story-text { font-size: 1.3rem; }
+            .time-display { font-size: 4rem; }
+            .reunion-img, .home-img { width: 220px; }
+            .reunion-title { font-size: 2.5rem; }
+            .letter-paper { padding: 30px 20px; }
+            .letter-content { font-size: 1.2rem; line-height: 28px; padding-left: 20px; }
+            .thanks-title.show { font-size: 50px; }
+            .home-title { font-size: 3rem; }
+            .nav-buttons { padding: 0 5px; }
+            .nav-btn { width: 40px; height: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Sprites -->
+    <svg style="display:none">
+        <symbol id="icon-paw" viewBox="0 0 24 24"><path d="M12 2c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm-6 2c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm12 0c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm-6 7c-4 0-7 2.69-7 6 0 2.21 3.13 4 7 4s7-1.79 7-4c0-3.31-3-6-7-6z"/></symbol>
+        <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
+        <symbol id="icon-help" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></symbol>
+        <symbol id="icon-tree" viewBox="0 0 24 24"><path d="M17 12h2L12 2 5 12h2l-3 8h6v4h4v-4h6z"/></symbol>
+        <symbol id="icon-clock" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+        <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></symbol>
+        <symbol id="icon-book" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></symbol>
+        <symbol id="icon-skip" viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></symbol>
+    </svg>
+
+    <audio id="bgmAudio" loop preload="auto">
+        <source src="audio/piano_bear.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="skip-btn" onclick="skipToReunion()">
+        <span>Skip</span>
+        <svg><use href="#icon-skip"></use></svg>
+    </div>
+
+    <!-- Modals -->
+    <div id="help-modal" class="modal-overlay">
+        <div class="modal-card">
+            <p class="modal-text" id="help-modal-text"></p>
+            <button class="btn-primary" style="margin: 0 auto;" onclick="closeModal()">Got it</button>
+        </div>
+    </div>
+
+    <!-- Screen 1: Intro -->
+    <div id="screen-intro" class="screen visible">
+        <div class="particles" id="intro-particles"></div>
+        <div class="intro-glow"></div>
+        <div class="bear-portrait-container">
+            <div class="bear-ring"></div>
+            <img src="images/lonely_bear.jpg" class="bear-portrait" alt="Lonely Bear" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PC9zdmc+'">
+        </div>
+        <div class="speech-bubble">
+            <div id="intro-text" class="typewriter-text"></div>
+        </div>
+        <button id="intro-btn" class="btn-primary" onclick="transitionTo('screen-pdf')">
+            OK, I'll Help!
+            <svg><use href="#icon-paw"></use></svg>
+        </button>
+    </div>
+
+    <!-- Screen 2: PDF + PIN -->
+    <div id="screen-pdf" class="screen">
+        <div class="starfield" id="starfield"></div>
+        
+        <div class="pdf-container" id="pdf-container">
+            <!-- Sleek Minimal Header -->
+            <div class="pdf-header-bar">
+                <div class="pdf-header-title">
+                    <svg><use href="#icon-book"></use></svg>
+                    <span>The Chronicles</span>
+                </div>
+                <div class="pdf-page-badge">
+                    <span class="pdf-dot-indicator"></span>
+                    <span>Document <span id="pdf-num-badge">1</span> of 3</span>
+                </div>
+            </div>
+
+            <!-- PDF iframes Viewport (Fills entire vertical space, zero page scroll) -->
+            <div class="pdf-iframe-viewport">
+                <iframe class="pdf-iframe active" id="pdf-iframe-1" src="https://drive.google.com/file/d/1tS37ClcTisKgMUvStDtZS9FveKv-LZKN/preview" allow="autoplay" loading="lazy"></iframe>
+                <iframe class="pdf-iframe" id="pdf-iframe-2" src="https://drive.google.com/file/d/1VN3SVO2oSzHAn1UzzyttaWHpRmL9PnvQ/preview" allow="autoplay" loading="lazy"></iframe>
+                <iframe class="pdf-iframe" id="pdf-iframe-3" src="https://drive.google.com/file/d/1Ep45U87k2o3JpV83vPWvgvyAiejWrubL/preview" allow="autoplay" loading="lazy"></iframe>
+            </div>
+
+            <!-- Branch Password Prompt (hidden until next on last PDF) -->
+            <div class="branch-prompt" id="branch-prompt">
+                <div class="branch-card">
+                    <svg class="branch-lock-icon"><use href="#icon-lock"></use></svg>
+                    <h3 class="branch-title">Identify the Branch</h3>
+                    <p class="branch-question">Answer should be which branch, you can tell which branch by identifying it i.e left/right</p>
+                    <div class="branch-input-row">
+                        <input type="text" class="branch-input" id="branch-input" placeholder="Type left or right..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') verifyBranch()">
+                        <button class="passkey-submit-btn" onclick="verifyBranch()">Submit</button>
+                    </div>
+                    <div class="branch-msg" id="branch-msg"></div>
+                    <button class="btn-ghost" style="margin-top: 14px; font-size: 0.85rem; padding: 6px 18px;" onclick="closeBranchPrompt()">← Back to PDFs</button>
+                </div>
+            </div>
+
+            <!-- Nav Arrows (Below PDF - Exactly 2 Buttons) -->
+            <div class="pdf-bottom-nav" id="pdf-bottom-nav">
+                <button class="pdf-arrow-btn" id="pdf-arr-prev" onclick="navPdfPage(-1)" disabled title="Previous PDF">
+                    <svg viewBox="0 0 24 24"><use href="#icon-arrow-left"></use></svg>
+                </button>
+                <div class="pdf-nav-dots">
+                    <div class="pdf-nav-dot active" id="pdot-1"></div>
+                    <div class="pdf-nav-dot" id="pdot-2"></div>
+                    <div class="pdf-nav-dot" id="pdot-3"></div>
+                </div>
+                <button class="pdf-arrow-btn" id="pdf-arr-next" onclick="navPdfPage(1)" title="Next PDF">
+                    <svg viewBox="0 0 24 24"><use href="#icon-arrow-right"></use></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Curtain -->
+    <div id="screen-curtain" class="screen">
+        <div class="curtain-wrapper">
+            <div class="curtain-half curtain-left" id="curtain-l">
+                <div class="curtain-texture"></div>
+            </div>
+            <div class="curtain-half curtain-right" id="curtain-r">
+                <div class="curtain-texture"></div>
+            </div>
+        </div>
+        <div class="valance">
+            <div class="valance-text">The Show Begins</div>
+        </div>
+        <div class="curtain-behind" id="curtain-behind">
+            <div class="curtain-title">Let me tell you my story...</div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Story Slides -->
+    <div id="screen-story" class="screen">
+        <div class="story-container" id="story-container">
+            <div class="nav-buttons">
+                <button class="nav-btn" id="slide-prev" onclick="changeSlide(-1)">
+                    <svg><use href="#icon-arrow-left"></use></svg>
+                </button>
+                <button class="nav-btn" id="slide-next" onclick="changeSlide(1)">
+                    <svg><use href="#icon-arrow-right"></use></svg>
+                </button>
+            </div>
+            
+            <div class="slide-dots" id="slide-dots">
+                <div class="dot active" onclick="goToSlide(0)"></div>
+                <div class="dot" onclick="goToSlide(1)"></div>
+                <div class="dot" onclick="goToSlide(2)"></div>
+                <div class="dot" onclick="goToSlide(3)"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 5: Shelter -->
+    <div id="screen-shelter" class="screen">
+        <div class="shelter-card">
+            <div class="shelter-bar"></div>
+            <div class="shelter-content">
+                <svg class="shelter-icon"><use href="#icon-tree"></use></svg>
+                <div class="story-text" style="font-size:1.4rem; margin-bottom:40px;">
+                    Torn the vines — it makes my tree look bad... I want a shelter... maybe it has something for you there...
+                </div>
+                <button class="btn-primary" style="background: #4caf50; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);" onclick="transitionTo('screen-timer'); startTimer();">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 6: Timer -->
+    <div id="screen-timer" class="screen">
+        <div class="timer-icon-container">
+            <svg class="timer-icon"><use href="#icon-clock"></use></svg>
+            <div class="timer-ring"></div>
+        </div>
+        <div class="timer-msg">Take your time... I'll wait right here</div>
+        <div class="time-display" id="time-display">3:00</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="timer-progress"></div>
+        </div>
+    </div>
+
+    <!-- Screen 7: Reunion -->
+    <div id="screen-reunion" class="screen">
+        <div class="floating-hearts" id="reunion-hearts"></div>
+        <div class="reunion-content">
+            <img src="images/bears_reunion.jpg" class="reunion-img" alt="Bears Reunion" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PC9zdmc+'">
+            <div class="reunion-title">They finally found each other!</div>
+            <button class="btn-primary" onclick="transitionTo('screen-letter'); setTimeout(startLetterTyping, 600);">
+                Start Journey
+                <svg><use href="#icon-heart"></use></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Screen 8: Letter -->
+    <div id="screen-letter" class="screen">
+        <div class="letter-paper">
+            <div class="letter-content" id="letter-content"></div>
+        </div>
+        <button id="letter-next" class="btn-primary" onclick="transitionTo('screen-thanks'); showThanks();">
+            Turn the next page
+        </button>
+    </div>
+
+    <!-- Screen 9: Thank You -->
+    <div id="screen-thanks" class="screen">
+        <div class="starfield" id="thanks-sparkles"></div>
+        <div class="thanks-title" id="thanks-text">Thank You</div>
+        <div class="thanks-sub" id="thanks-sub">For being part of our story</div>
+        <button id="go-home-btn" class="btn-primary" onclick="transitionTo('screen-home'); stopBGM();">
+            Go Home
+            <svg><use href="#icon-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </button>
+    </div>
+
+    <!-- Screen 10: Home -->
+    <div id="screen-home" class="screen">
+        <img src="images/bears_reunion.jpg" class="home-img" alt="Bears Reunion" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PC9zdmc+'">
+        <div class="home-title">Our Story</div>
+        <button class="btn-primary" onclick="restartGame()">
+            Start Again
+            <svg><use href="#icon-refresh"></use></svg>
+        </button>
+    </div>
+
+    <div class="audio-control playing" id="audio-btn" onclick="toggleMute()">
+        <div class="eq-bars">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        // Transition System (CRITICAL)
+        function transitionTo(targetId) {
+            const current = document.querySelector('.screen.visible');
+            const target = document.getElementById(targetId);
+            if (current === target) return;
+            
+            if(target) {
+                target.style.zIndex = 20;
+                target.style.opacity = 0;
+                target.style.visibility = 'visible';
+                target.style.transform = 'scale(1.03)';
+                target.style.filter = 'blur(6px)';
+                
+                requestAnimationFrame(() => {
+                    target.style.transition = 'opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease';
+                    target.style.opacity = 1;
+                    target.style.transform = 'scale(1)';
+                    target.style.filter = 'blur(0)';
+                });
+            }
+            
+            if (current) {
+                current.style.transition = 'opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease';
+                current.style.opacity = 0;
+                current.style.transform = 'scale(0.97)';
+                current.style.filter = 'blur(4px)';
+            }
+            
+            setTimeout(() => {
+                if (current) {
+                    current.classList.remove('visible');
+                    current.style.cssText = '';
+                }
+                if(target) {
+                    target.classList.add('visible');
+                    target.style.cssText = '';
+                }
+            }, 650);
+        }
+
+        // Global State
+        let isReplay = false;
+        let currentPin = '';
+        let pinAttempts = 0;
+        let helpClicks = 0;
+        let isLocked = true;
+        
+        let currentSlide = 0;
+        let slideChecks = [false, false, false, false];
+        let timerInterval = null;
+        let typingTimeout = null;
+
+        const storyData = [
+            {
+                chapter: "CHAPTER I",
+                text: "Hello there, it's me, a lonely little bear,\nWrapped in a plastic suit, sitting in despair.\nFor an entire day, I waited on my own,\nMissing my dear partner, feeling so alone.",
+                checkLabel: "I got it",
+                hint: "We lived in a tree"
+            },
+            {
+                chapter: "CHAPTER II",
+                text: "Your friend is the one who took her far away,\nAnd oh, I was so angry at him on that day!\nBut then I saw he understood the sadness of his mistake,\nAnd crafted us a sweet new home, just for our sake.",
+                checkLabel: "I got it",
+                hint: "There was a bloody sun-soaked lake near the bottom of the tree"
+            },
+            {
+                chapter: "CHAPTER III",
+                text: "I used to live high up in the branches of a tree,\nBut he built a special place just for her and me.\nHe shaped it with his hands, pinning pine vines to the side,\nA lovely breathing haven where we both can reside.",
+                checkLabel: "I got it",
+                hint: "I used to live high up... think about what he built"
+            },
+            {
+                chapter: "CHAPTER IV",
+                text: "So please, will you bring her? We belong together, you see.\nBut to find where I'm waiting, you must solve this for me:\n<em>I have walls made of nature, but no roots in the ground,\nWreathed in twin vines of pine, where a new breath is found.\nI am built by gentle hands, not grown from a seed,\nWhere am I hidden? Bring my friend to me, I plead!</em>",
+                checkLabel: "I placed them!",
+                hint: "Is it my tree? Or is it even one? Or is it a delusion...",
+                warning: "Please tick only when you have actually done it — otherwise it will harm me and my partner."
+            }
+        ];
+
+        // Audio System
+        const bgm = document.getElementById('bgmAudio');
+        const audioBtn = document.getElementById('audio-btn');
+        let isMuted = false;
+
+        function startBGM(volume = 0.12) {
+            bgm.volume = volume;
+            if(!isMuted) {
+                bgm.play().catch(e => console.log('Audio autoplay prevented'));
+                audioBtn.classList.add('playing');
+            }
+        }
+        function setBGMVolume(vol) {
+            bgm.volume = vol;
+        }
+        function stopBGM() {
+            bgm.pause();
+            bgm.currentTime = 0;
+            audioBtn.classList.remove('playing');
+        }
+        function toggleMute() {
+            isMuted = !isMuted;
+            if(isMuted) {
+                bgm.pause();
+                audioBtn.classList.remove('playing');
+            } else {
+                bgm.play();
+                audioBtn.classList.add('playing');
+            }
+        }
+
+        // Particle Generators
+        function generateParticles(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 8 + 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                if(containerId === 'intro-particles') {
+                    p.style.background = `hsla(${Math.random()*60 + 280}, 70%, 70%, 0.5)`;
+                }
+                container.appendChild(p);
+            }
+        }
+
+        function generateStars(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                const star = document.createElement('div');
+                star.className = containerId.includes('sparkle') ? 'sparkle' : 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (Math.random() * 2 + 1) + 's');
+                star.style.setProperty('--opacity', Math.random() * 0.8 + 0.2);
+                if(containerId.includes('sparkle')) {
+                    star.style.setProperty('--dur', (Math.random() * 1.5 + 0.5) + 's');
+                }
+                container.appendChild(star);
+            }
+        }
+
+        function generateHearts() {
+            const container = document.getElementById('reunion-hearts');
+            container.innerHTML = '';
+            for(let i=0; i<20; i++) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.classList.add('f-heart');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+                use.setAttribute('href', '#icon-heart');
+                svg.appendChild(use);
+                
+                const size = Math.random() * 30 + 15;
+                svg.style.width = size + 'px';
+                svg.style.height = size + 'px';
+                svg.style.left = Math.random() * 100 + '%';
+                svg.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                svg.style.animationDelay = (Math.random() * 3) + 's';
+                container.appendChild(svg);
+            }
+        }
+
+        // Initialize Backgrounds
+        generateParticles('intro-particles', 30);
+        generateStars('starfield', 80);
+        generateStars('thanks-sparkles', 50);
+        generateHearts();
+
+        // Intro Typing
+        const introLines = [
+            "I'm so lonely...",
+            "",
+            "Can you help me find my partner?",
+            "She is locked behind this...",
+            "",
+            "Will you help me?"
+        ];
+
+        function startIntroTyping() {
+            const container = document.getElementById('intro-text');
+            container.innerHTML = '';
+            let lineIdx = 0;
+            let charIdx = 0;
+            
+            function type() {
+                if(lineIdx >= introLines.length) {
+                    document.getElementById('intro-btn').classList.add('show');
+                    return;
+                }
+                
+                if(charIdx === 0 && lineIdx > 0) {
+                    container.appendChild(document.createElement('br'));
+                }
+                
+                if(charIdx < introLines[lineIdx].length) {
+                    container.innerHTML += introLines[lineIdx].charAt(charIdx);
+                    charIdx++;
+                    typingTimeout = setTimeout(type, 50);
+                } else {
+                    lineIdx++;
+                    charIdx = 0;
+                    typingTimeout = setTimeout(type, 400);
+                }
+            }
+            type();
+        }
+
+        // ═══ PDF IFRAME NAVIGATION ═══
+        let pdfCurrentPage = 1;
+
+        function navPdfPage(dir) {
+            let target = pdfCurrentPage + dir;
+            
+            // If on last PDF and pressing next → show branch prompt
+            if (pdfCurrentPage === 3 && dir === 1) {
+                document.getElementById('branch-prompt').classList.add('visible');
+                document.getElementById('pdf-bottom-nav').style.display = 'none';
+                setTimeout(() => {
+                    const inp = document.getElementById('branch-input');
+                    if (inp) inp.focus();
+                }, 100);
+                return;
+            }
+            
+            if (target < 1 || target > 3) return;
+            showPdfIframe(target);
+        }
+
+        function showPdfIframe(num) {
+            pdfCurrentPage = num;
+            document.querySelectorAll('.pdf-iframe').forEach((f, idx) => {
+                f.classList.toggle('active', (idx + 1) === num);
+            });
+            const prevBtn = document.getElementById('pdf-arr-prev');
+            if (prevBtn) prevBtn.disabled = (num === 1);
+            const nextBtn = document.getElementById('pdf-arr-next');
+            if (nextBtn) nextBtn.disabled = false;
+
+            const badge = document.getElementById('pdf-num-badge');
+            if (badge) badge.textContent = num;
+
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById(`pdot-${i}`);
+                if (dot) dot.classList.toggle('active', i === num);
+            }
+        }
+
+        function verifyBranch() {
+            const input = document.getElementById('branch-input');
+            const msg = document.getElementById('branch-msg');
+            const val = input.value.trim().toLowerCase();
+            
+            if (val === 'left' || val === 'right' || val.includes('left') || val.includes('right')) {
+                msg.className = 'branch-msg success';
+                msg.textContent = 'Correct! Opening the story...';
+                input.disabled = true;
+                setTimeout(() => {
+                    transitionTo('screen-curtain');
+                    setTimeout(openCurtain, 800);
+                }, 800);
+            } else {
+                msg.className = 'branch-msg error';
+                msg.textContent = 'That does not seem right. Look at the images carefully — which branch?';
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 450);
+            }
+        }
+
+        function closeBranchPrompt() {
+            document.getElementById('branch-prompt').classList.remove('visible');
+            document.getElementById('pdf-bottom-nav').style.display = 'flex';
+        }
+
+        function handlePinHelp() {
+            helpClicks++;
+            let msg = "";
+            if(helpClicks === 1) msg = "Do you really know?";
+            else if(helpClicks <= 3) msg = "Do you really know? Think harder!";
+            else msg = "Think you are chatting in a WP chat... what will be your answer? Try something about it!";
+            
+            document.getElementById('help-modal-text').textContent = msg;
+            document.getElementById('help-modal').classList.add('show');
+        }
+
+        function showHelpModal(msg) {
+            document.getElementById('help-modal-text').textContent = msg;
+            document.getElementById('help-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('help-modal').classList.remove('show');
+        }
+
+        // Curtain
+        function openCurtain() {
+            startBGM(0.12);
+            document.getElementById('curtain-behind').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('curtain-l').style.transform = 'translateX(-105%)';
+                document.getElementById('curtain-r').style.transform = 'translateX(105%)';
+                
+                setTimeout(() => {
+                    transitionTo('screen-story');
+                    buildSlides();
+                }, 2200);
+            }, 1500);
+        }
+
+        // Story Slides
+        function buildSlides() {
+            const container = document.getElementById('story-container');
+            document.querySelectorAll('.slide').forEach(s => s.remove());
+            
+            storyData.forEach((data, index) => {
+                const slide = document.createElement('div');
+                slide.className = `slide ${index === 0 ? 'active' : ''}`;
+                slide.id = `slide-${index}`;
+                
+                let checkHTML = '';
+                let warningHTML = '';
+                
+                if(data.checkLabel) {
+                    checkHTML = `
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="check-${index}" onchange="handleSlideCheck(${index})" ${slideChecks[index] ? 'checked' : ''}>
+                        <div class="custom-checkbox"><svg><use href="#icon-check"></use></svg></div>
+                        <span class="checkbox-label">${data.checkLabel}</span>
+                    </label>`;
+                }
+                if(data.warning) {
+                    warningHTML = `<div class="warning-text">${data.warning}</div>`;
+                }
+
+                slide.innerHTML = `
+                    <div class="story-card">
+                        <div class="story-bar"></div>
+                        <div class="story-content">
+                            <div class="slide-header">
+                                <div class="divider"></div>
+                                <span>${data.chapter}</span>
+                                <div class="divider"></div>
+                            </div>
+                            <div class="story-text">${data.text.replace(/\n/g, '<br>')}</div>
+                            ${warningHTML}
+                            ${checkHTML}
+                            <button class="btn-hint" onclick="showHelpModal('${data.hint.replace(/'/g, "\\'")}')">Need Help?</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(slide);
+            });
+            updateSlideArrows();
+        }
+
+        function changeSlide(dir) {
+            goToSlide(currentSlide + dir);
+        }
+
+        function goToSlide(index) {
+            if(index < 0 || index >= storyData.length || index === currentSlide) return;
+            
+            const current = document.getElementById(`slide-${currentSlide}`);
+            const target = document.getElementById(`slide-${index}`);
+            
+            if(current) {
+                current.classList.remove('active');
+                current.style.transform = index > currentSlide ? 'translateX(-50px)' : 'translateX(50px)';
+            }
+            
+            if(target) {
+                target.classList.add('active');
+                target.style.transform = 'translateX(0)';
+            }
+            
+            currentSlide = index;
+            updateSlideArrows();
+            
+            document.querySelectorAll('.slide-dots .dot').forEach((d, i) => {
+                d.className = `dot ${i === index ? 'active' : ''}`;
+            });
+        }
+
+        function updateSlideArrows() {
+            document.getElementById('slide-prev').disabled = currentSlide === 0;
+            document.getElementById('slide-next').disabled = currentSlide === storyData.length - 1;
+        }
+
+        function handleSlideCheck(index) {
+            const cb = document.getElementById(`check-${index}`);
+            slideChecks[index] = cb.checked;
+            
+            if(index === 3 && cb.checked) {
+                setTimeout(() => {
+                    transitionTo('screen-shelter');
+                }, 500);
+            }
+        }
+
+        // Timer
+        function startTimer() {
+            let timeLeft = 180; // 3 minutes
+            const display = document.getElementById('time-display');
+            const progress = document.getElementById('timer-progress');
+            
+            if(timerInterval) clearInterval(timerInterval);
+            
+            function update() {
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                display.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+                progress.style.width = `${(timeLeft / 180) * 100}%`;
+                
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    transitionTo('screen-reunion');
+                }
+                timeLeft--;
+            }
+            
+            update();
+            timerInterval = setInterval(update, 1000);
+        }
+
+        // Letter
+        const letterPoem = `Two little bears, once worlds apart,
+Now reunited, heart to heart.
+
+Through puzzles, riddles, and a patient wait,
+You brought us together — it must be fate.
+
+The vines were torn, the shelter found,
+And love was spread upon the ground.
+
+A tree, a home, a place to stay,
+Where two small bears can laugh and play.
+
+So thank you, friend, for all you've done,
+Our journey's end has just begun.
+
+With paws entwined and hearts aglow,
+Together now, wherever we go.
+
+You believed in us when no one could see,
+That the greatest gift is setting love free.
+
+~ With love, from both of us ~`;
+
+        function startLetterTyping() {
+            setBGMVolume(0.35);
+            const container = document.getElementById('letter-content');
+            container.innerHTML = '<span class="cursor"></span>';
+            
+            let charIdx = 0;
+            const lines = letterPoem.split('\n');
+            let textAcc = '';
+            
+            function type() {
+                if(charIdx < letterPoem.length) {
+                    const char = letterPoem.charAt(charIdx);
+                    textAcc += char === '\n' ? '<br>' : char;
+                    container.innerHTML = textAcc + '<span class="cursor"></span>';
+                    charIdx++;
+                    
+                    const delay = char === '\n' ? 300 : (char === ',' ? 150 : 30);
+                    typingTimeout = setTimeout(type, delay);
+                } else {
+                    document.getElementById('letter-next').classList.add('show');
+                }
+            }
+            type();
+        }
+
+        // Thanks
+        function showThanks() {
+            setBGMVolume(0.08);
+            setTimeout(() => {
+                document.getElementById('thanks-text').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('thanks-sub').classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('go-home-btn').classList.add('show');
+                    }, 1800);
+                }, 1200);
+            }, 500);
+        }
+
+        // Global Reset & Replay
+        function restartGame() {
+            isReplay = true;
+            document.getElementById('skip-btn').classList.add('show');
+            
+            // Reset state
+            currentPin = '';
+            pinAttempts = 0;
+            helpClicks = 0;
+            isLocked = true;
+            currentSlide = 0;
+            slideChecks = [false, false, false, false];
+            if(timerInterval) clearInterval(timerInterval);
+            if(typingTimeout) clearTimeout(typingTimeout);
+            
+            // Reset UI
+            updatePinDots();
+            document.getElementById('pin-attempts').textContent = '';
+            document.getElementById('pin-help').classList.remove('visible');
+            document.getElementById('pin-overlay').style.cssText = '';
+            document.getElementById('pdf-container').className = 'pdf-container locked';
+            
+            // Reset PDF viewer & Branch Prompt
+            pdfCurrentPage = 1;
+            showPdfIframe(1);
+            const branchPrompt = document.getElementById('branch-prompt');
+            if (branchPrompt) branchPrompt.classList.remove('visible');
+            const branchInput = document.getElementById('branch-input');
+            if (branchInput) {
+                branchInput.value = '';
+                branchInput.disabled = false;
+            }
+            const branchMsg = document.getElementById('branch-msg');
+            if (branchMsg) {
+                branchMsg.className = 'branch-msg';
+                branchMsg.textContent = '';
+            }
+            const pdfNav = document.getElementById('pdf-bottom-nav');
+            if (pdfNav) pdfNav.style.display = 'flex';
+            
+            document.getElementById('curtain-behind').classList.remove('show');
+            document.getElementById('curtain-l').style.transform = '';
+            document.getElementById('curtain-r').style.transform = '';
+            
+            document.getElementById('letter-content').innerHTML = '';
+            document.getElementById('letter-next').classList.remove('show');
+            
+            document.getElementById('thanks-text').classList.remove('show');
+            document.getElementById('thanks-sub').classList.remove('show');
+            document.getElementById('go-home-btn').classList.remove('show');
+            
+            document.getElementById('intro-btn').classList.remove('show');
+            document.getElementById('intro-text').innerHTML = '';
+            
+            stopBGM();
+            transitionTo('screen-intro');
+            setTimeout(startIntroTyping, 800);
+        }
+
+        function skipToReunion() {
+            if(timerInterval) clearInterval(timerInterval);
+            if(typingTimeout) clearTimeout(typingTimeout);
+            transitionTo('screen-reunion');
+        }
+
+        // Keyboard support
+        window.addEventListener('keydown', (e) => {
+            if(document.getElementById('screen-pdf').classList.contains('visible')) {
+                if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                if(e.key === 'ArrowLeft') navPdfPage(-1);
+                if(e.key === 'ArrowRight') navPdfPage(1);
+            }
+            else if(document.getElementById('screen-story').classList.contains('visible')) {
+                if(e.key === 'ArrowLeft') changeSlide(-1);
+                if(e.key === 'ArrowRight') changeSlide(1);
+            }
+        });
+
+        // Init
+        window.onload = () => {
+            setTimeout(startIntroTyping, 500);
+        };
+    </script>
+</body>
+</html>
